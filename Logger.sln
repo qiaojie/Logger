@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "Logger\Logger.csproj", "{E3C6DE00-306A-4C83-A710-ECBD9327CDE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testcase", "..\Testcase\Testcase.csproj", "{FB4425C5-6ACA-4C4D-8B2D-9950F8DC382D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testcase", "Testcase\Testcase.csproj", "{FB4425C5-6ACA-4C4D-8B2D-9950F8DC382D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
