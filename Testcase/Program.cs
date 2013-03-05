@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Threading;
 
 class Program
 {
@@ -55,19 +56,19 @@ class Program
 			{
 				case LogLevel.Info:
 					Console.ForegroundColor = ConsoleColor.White;
-					Console.WriteLine("[Info  {0}]  {1}", time.ToString("HH:mm:ss"), content);
+					Console.WriteLine("[{0}.Info  {1}]  {2}", threadName, time.ToString("HH:mm:ss"), content);
 					break;
 				case LogLevel.Debug:
 					Console.ForegroundColor = ConsoleColor.Gray;
-					Console.WriteLine("[Debug {0}]  {1}", time.ToString("HH:mm:ss"), content);
+					Console.WriteLine("[{0}.Debug {1}]  {2}", threadName, time.ToString("HH:mm:ss"), content);
 					break;
 				case LogLevel.Warning:
 					Console.ForegroundColor = ConsoleColor.Yellow;
-					Console.WriteLine("[Warn  {0}]  {1}", time.ToString("HH:mm:ss"), content);
+					Console.WriteLine("[{0}.Warn  {1}]  {2}", threadName, time.ToString("HH:mm:ss"), content);
 					break;
 				case LogLevel.Error:
 					Console.ForegroundColor = ConsoleColor.Red;
-					Console.WriteLine("[Error {0}]  {1}", time.ToString("HH:mm:ss"), content);
+					Console.WriteLine("[{0}.Error {1}]  {2}", threadName, time.ToString("HH:mm:ss"), content);
 					break;
 			}
 			return false;
@@ -80,12 +81,48 @@ class Program
 		Log.Debug("some debug stuff...");
 		Log.Flush();
 	}
-	
+
+	static void CreateThread(int id)
+	{
+		var thread = new Thread(s =>
+		{
+			Thread.CurrentThread.Name = "Worker" + id;
+			Log.Info("start");
+			for(int i = 0; i < 5; ++i)
+			{
+				Log.Debug("do something...");
+				Thread.Sleep(new Random().Next(100));
+				Log.Append("ok");
+			}
+			Log.Info("end.");
+			Log.Info("");
+		});
+		thread.Start();
+	}
+
+	/// <summary>
+	/// test the muti-thread log
+	/// </summary>
+	static void Test4()
+	{
+		Thread.CurrentThread.Name = "Main";
+		for(int i = 0; i < 10; ++i)
+		{
+			Log.Debug("start thread {0}...", i);
+			Thread.Sleep(10);
+			CreateThread(i);
+			Log.Append("ok");
+		}
+		Thread.Sleep(500);
+		Log.Info("finished.");
+		Log.Flush();
+	}
 
 	static void Main(string[] args)
 	{
 		Test1();
 		Test2();
 		Test3();
+		Test4();
 	}
 }
